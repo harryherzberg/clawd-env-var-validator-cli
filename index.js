@@ -14,12 +14,12 @@ program
 program
   .argument('[schema]', 'JSON schema file', 'schema.json')
   .argument('[env]', '.env file', '.env')
-  .option('-l, --license &lt;key&gt;', 'Pro license key (DEMO-PRO)')
-  .option('-f, --format &lt;format&gt;', 'Output: table|json|csv|pdf', 'table')
+  .option('-l, --license <key>', 'Pro license key (DEMO-PRO)')
+  .option('-f, --format <format>', 'Output: table|json|csv|pdf', 'table')
   .option('--secrets', 'Detect and mask secrets')
   .action(async (schemaPath, envPath, cmd) => {
     const isPro = cmd.license === 'DEMO-PRO';
-    if (cmd.format !== 'table' &amp;&amp; !isPro) {
+    if (cmd.format !== 'table' && !isPro) {
       console.log('🔓 DEMO MODE: Table only. Pro ($29 Gumroad): exports/PDF.');
       process.exit(0);
     }
@@ -42,8 +42,8 @@ program
     const secretRegex = /pass|secret|key|token|pwd|api/i;
 
     // Add validation errors
-    if (!valid) {
-      ajv.errors.forEach(err =&gt; {
+    if (!valid && ajv.errors) {
+      ajv.errors.forEach(err => {
         const field = err.instancePath.slice(1);
         results.push({
           field,
@@ -58,9 +58,9 @@ program
 
     // Check required missing
     if (schema.required) {
-      schema.required.forEach(req =&gt; {
+      schema.required.forEach(req => {
         if (!envObj[req]) {
-          if (!results.find(r =&gt; r.field === req)) {
+          if (!results.find(r => r.field === req)) {
             results.push({
               field: req,
               expected: 'required',
@@ -76,8 +76,8 @@ program
 
     // Secrets list (pro-ish)
     if (cmd.secrets || isPro) {
-      Object.keys(envObj).forEach(key =&gt; {
-        if (secretRegex.test(key) &amp;&amp; !results.find(r =&gt; r.field === key)) {
+      Object.keys(envObj).forEach(key => {
+        if (secretRegex.test(key) && !results.find(r => r.field === key)) {
           results.push({
             field: key,
             expected: 'secret',
@@ -97,12 +97,12 @@ program
 
     switch (cmd.format) {
       case 'table':
-        console.table(results.map(r =&gt; ({field: r.field, status: r.status, error: r.error, masked: r.masked})));
+        console.table(results.map(r => ({field: r.field, status: r.status, error: r.error, masked: r.masked})));
         break;
       case 'json':
       case 'csv':
         const out = cmd.format === 'json' ? JSON.stringify(results, null, 2) : 
-          [Object.keys(results[0]).join(','), ...results.map(r =&gt; Object.values(r).map(v =&gt; typeof v === 'string' ? `"${v}"` : v).join(','))].join('\\n');
+          [Object.keys(results[0]).join(','), ...results.map(r => Object.values(r).map(v => typeof v === 'string' ? `\"${v}\"` : v).join(','))].join('\\n');
         fs.writeFileSync(`env-report-${cmd.format}`, out);
         console.log(`📄 Exported to env-report-${cmd.format}`);
         break;
@@ -118,30 +118,30 @@ async function generatePdf(results, schemaPath) {
   const browser = await puppeteer.launch({headless: 'new'});
   const page = await browser.newPage();
   const html = `
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;&lt;title&gt;Env Var Validation Report&lt;/title&gt;
-&lt;style&gt;
+<!DOCTYPE html>
+<html>
+<head><title>Env Var Validation Report</title>
+<style>
 table {border-collapse: collapse; width:100%;} 
 th,td {border:1px solid #ddd; padding:8px; text-align:left;} 
 tr:nth-child(even){background:#f2f2f2;} 
 .error {background: #ffebee;} 
 .secret {background: #e3f2fd;}
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;Env Validation Report&lt;/h1&gt;
-&lt;p&gt;Schema: ${path.basename(schemaPath)}&lt;/p&gt;
-&lt;table&gt;
-  &lt;tr&gt;&lt;th&gt;Field&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;th&gt;Error&lt;/th&gt;&lt;th&gt;Value&lt;/th&gt;&lt;/tr&gt;
-  ${results.map(r =&gt; 
-    `&lt;tr class='${r.status === '❌' ? 'error' : r.status === '🔒' ? 'secret' : ''}'&gt;
-      &lt;td&gt;${r.field}&lt;/td&gt;&lt;td&gt;${r.status}&lt;/td&gt;&lt;td&gt;${r.error}&lt;/td&gt;&lt;td&gt;${r.masked}&lt;/td&gt;
-    &lt;/tr&gt;`
+</style>
+</head>
+<body>
+<h1>Env Validation Report</h1>
+<p>Schema: ${path.basename(schemaPath)}</p>
+<table>
+  <tr><th>Field</th><th>Status</th><th>Error</th><th>Value</th></tr>
+  ${results.map(r => 
+    `<tr class='${r.status === '❌' ? 'error' : r.status === '🔒' ? 'secret' : ''}'>
+      <td>${r.field}</td><td>${r.status}</td><td>${r.error}</td><td>${r.masked}</td>
+    </tr>`
   ).join('')}
-&lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;`;
+</table>
+</body>
+</html>`;
   await page.setContent(html);
   await page.pdf({path: 'env-report.pdf', format: 'A4'});
   await browser.close();
