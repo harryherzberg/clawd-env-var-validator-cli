@@ -2,12 +2,22 @@
   "name": "env-var-validator",
   "version": "1.0.0",
   "description": "CLI to validate .env files against JSON schema. Flag missing/invalid vars, secrets (pro exports).",
-  "main": "index.js",\n    "bin": {"env-validate": "./index.js"},
+  "main": "index.js",
+  "bin": {
+    "env-validate": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["env", "dotenv", "validate", "json-schema", "devops", "cli"],
-  "author": "Clawdbot &lt;bot@clawd.bot&gt;",
+  "keywords": [
+    "env",
+    "dotenv",
+    "validate",
+    "json-schema",
+    "devops",
+    "cli"
+  ],
+  "author": "Clawdbot <bot@clawd.bot>",
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
