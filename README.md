@@ -1,58 +1,37 @@
-# Env Var Validator CLI
+<div align="center">
 
-CLI tool to validate your `.env` files against a JSON Schema. Detects missing required vars, type mismatches, and flags potential secrets.
+# 🔒 Env Var Validator
 
-## Who it's for
-- DevOps engineers
-- Developers deploying apps
-- Teams preventing prod outages from bad config
+**Validate .env files against schema**
 
-**Problem solved:** Runtime crashes from invalid/missing env vars. Saves debugging time.
+<img src="https://img.shields.io/badge/Pro-%2429-10b981?style=for-the-badge&logo=gumroad" alt="Pro 29" /> <a href="https://harryherzberg.gumroad.com/l/env-var-validator">Buy Pro</a>
+</div>
 
-## Features
-- **Free:** Console table of issues
-- **Pro ($29 one-time Gumroad):** JSON/CSV/PDF exports, advanced secret detection
+## ✨ Features
 
-## Quick Start
-```
-npm i -g env-var-validator
-env-validate schema.json .env
-```
+| Feature | Benefit |
+|---------|---------|
+| Schema Support | JSON/YAML env schemas |
+| Type Checking | String/number/bool |
+| Missing Vars | Fail fast |
+| PDF Report | Pro detailed |
+| Exit Codes | CI friendly |
 
-### Sample schema.json
-```json
-{
-  \"type\": \"object\",
-  \"properties\": {
-    \"DB_HOST\": {\"type\": \"string\"},
-    \"PORT\": {\"type\": \"number\", \"minimum\": 1024},
-    \"DEBUG\": {\"type\": \"boolean\"}
-  },
-  \"required\": [\"DB_HOST\", \"PORT\"]
-}
+## 🚀 Quick Start
+
+```bash
+npx env-var-validator@latest --help
+# Or global: npm i -g env-var-validator
 ```
 
-### Sample .env
-```
-DB_HOST=localhost
-PORT=3000
-DEBUG=true
-API_SECRET=shhhhh
-```
+## 💎 Go Pro - Lifetime $29
 
-Output: Flags missing, wrong types, lists secrets.
+- ✅ Unlimited runs
+- 📄 PDF reports
+- 🏢 Commercial use
+- 💬 Support
 
-## Pro License
-Use `--license DEMO-PRO` to test pro features.
-Buy at Gumroad: [link TBD]
+<img src="https://img.shields.io/badge/Buy_Pro-%2429-FF6B35?style=for-the-badge&logo=gumroad" alt="Buy Pro" /> <a href="https://harryherzberg.gumroad.com/l/env-var-validator">Buy Now</a>
 
-## How to run locally
-1. `npm i`
-2. `node index.js --help`
-3. `chmod +x index.js`
-4. `./index.js schema.json .env -l DEMO-PRO -f pdf`
-
-## Monetization Ready
-- Gumroad product: Zip/tgz download
-- License key validation built-in
-- Clear buyer path in README
+---
+👨‍💻 [Harry Herzberg](https://github.com/harryherzberg) | 🐙 [GitHub](https://github.com/harryherzberg/clawd/tree/main/apps/env-var-validator-cli)

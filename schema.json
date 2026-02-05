@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "DB_HOST": {"type": "string"},
+    "PORT": {"type": "number"},
+    "DEBUG": {"type": "boolean"}
+  },
+  "required": ["DB_HOST"]
+}
