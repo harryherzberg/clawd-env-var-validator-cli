@@ -1,5 +1,5 @@
 {
-  "name": "env-var-validator",
+  "name": "@spiderjew/env-var-validator-cli",
   "version": "1.0.0",
   "description": "CLI to validate .env files against JSON schema. Flag missing/invalid vars, secrets (pro exports).",
   "main": "index.js",
@@ -25,5 +25,8 @@
     "commander": "^14.0.3",
     "dotenv": "^17.2.3",
     "puppeteer": "^24.36.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
